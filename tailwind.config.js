@@ -50,6 +50,10 @@ module.exports = {
         flicker: 'flicker 3s linear infinite',
         shimmer: 'shimmer 1.3s linear infinite',
       },
+      backgroundImage: {
+        "page-gradient":
+          "radial-gradient(ellipse 50% 50% at 50% 30%,rgba(255,0,202, 0.10), transparent)",
+      },
     },
   },
   plugins: [require('@tailwindcss/forms')],
