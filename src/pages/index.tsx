@@ -27,7 +27,8 @@ export default function HomePage() {
 
   const ACCESS_TOEKN: any = process.env.NEXT_PUBLIC_OPENAI_ACCESS_TOKEN;
   const API_KEY: any = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
-  const generateResponse = async () => {
+
+  const generateResponseViaChatGPT = async () => {
     try {
       console.log('Generating response ....');
       const response = await fetch('./api/generate', {
@@ -40,10 +41,34 @@ export default function HomePage() {
       console.log(response.statusText);
       const data = await response.json();
       const { output } = data;
-      setResponse(output.text);
-      console.log(output.text);
 
-      console.log(data);
+      console.log(output);
+      const formattedOutput = output.split('```')[1];
+      console.log(formattedOutput);
+      setResponse(formattedOutput);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const generateResponseViaOpenAI = async () => {
+    try {
+      console.log('Generating response ....');
+      const response = await fetch('./api/openai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userInput }),
+      });
+      console.log(response.statusText);
+      const data = await response.json();
+      const { output } = data;
+
+      console.log(output);
+      const formattedOutput = output.text;
+      console.log(formattedOutput);
+      setResponse(formattedOutput);
     } catch (err) {
       console.log(err);
     }
@@ -129,7 +154,7 @@ export default function HomePage() {
                 </div> */}
                 <button
                   className='w-full rounded-lg bg-white p-4'
-                  onClick={() => generateChatGPTApi()}
+                  onClick={() => generateResponseViaChatGPT()}
                 >
                   Write the damn expression
                 </button>
