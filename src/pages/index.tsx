@@ -23,6 +23,7 @@ import { ChatGPTAPI, ChatGPTUnofficialProxyAPI } from 'chatgpt';
 
 export default function HomePage() {
   const [userInput, setUserInput] = useState<string>('');
+  const [response, setResponse] = useState<string>();
 
   const ACCESS_TOEKN: any = process.env.NEXT_PUBLIC_OPENAI_ACCESS_TOKEN;
   const API_KEY: any = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
@@ -38,9 +39,10 @@ export default function HomePage() {
       });
       console.log(response.statusText);
       const data = await response.json();
-      // const { output } = data;
+      const { output } = data;
+      setResponse(output.text);
+      console.log(output.text);
 
-      // console.log(output);
       console.log(data);
     } catch (err) {
       console.log(err);
@@ -130,7 +132,7 @@ export default function HomePage() {
               <div className='sm:w-1/2'>
                 <div className='mt-10 flex h-full min-h-[300px] w-full items-center justify-center rounded-md bg-[#161616] p-8 shadow sm:mt-0'>
                   <div className='text-lg font-extralight text-white'>
-                    Response
+                    {response ? response : 'No Output'}
                   </div>
                 </div>
               </div>
