@@ -96,32 +96,35 @@ export default function HomePage() {
 
       <main>
         <section className='bg-black bg-page-gradient'>
-          <div className='layout relative flex min-h-screen flex-col items-center justify-center py-12 text-center'>
-            <h1 className='mt-4 font-light text-white sm:text-2xl md:text-5xl'>
-              How do i write this damn{' '}
-              <span className='text-[#FF90E8]'> cron expression</span>
+          <div className='relative flex flex-col items-center justify-center min-h-screen py-12 text-center layout'>
+            <h1 className='mt-4 font-light text-white sm:text-2xl md:text-4xl'>
+              How do I write this damn{' '}
+              <span className='font-medium text-[#FF90E8]'>
+                {' '}
+                cron expression
+              </span>
             </h1>
-            <p className='my-10 font-extralight text-[#d9d9d9] sm:text-lg md:text-2xl'>
+            <p className='sm:text-md my-10 font-extralight text-[#d9d9d9] md:text-lg'>
               Vercel released Cron Jobs recently and to help my fellow devs out
-              i built this tiny free tool
+              I built this tiny free tool
             </p>
-            <div className='mt-10 h-full w-full gap-6 sm:flex'>
+            <div className='w-full h-full gap-6 mt-10 sm:flex'>
               <div className='sm:w-1/2'>
                 <div className='mb-4 h-fit min-h-[300px] w-full rounded-md bg-[#161616] p-8 shadow '>
-                  <input
-                    className='mb-4 h-12 w-full break-words rounded-lg bg-transparent px-4 text-lg font-extralight text-white focus:outline-none'
-                    placeholder='every 15 mins on alternate days of the month only in November and december'
+                  <textarea
+                    className='flex-wrap w-full h-full min-h-[300px] px-4 mb-4 text-lg text-white bg-transparent border-none rounded-lg resize-none active:outline-none focus:ring-none focus:ring-transparent focus:border-none font-extralight focus:outline-none'
+                    placeholder='every 15 mins on alternate days of the month only in november and december'
                     onChange={(e) => setUserInput(e.target.value)}
                   />
                 </div>
                 {/* <div
-                  className='w-full rounded-lg bg-white p-4'
+                  className='w-full p-4 bg-white rounded-lg'
                   onClick={() => generateChatGPTResponse()}
                 >
                   Write the damn expression
                 </div> */}
                 <button
-                  className='w-full rounded-lg bg-white p-4'
+                  className='w-full p-4 transition ease-linear bg-white rounded-lg cursor-pointer hover:opacity-80'
                   onClick={() => generateResponse()}
                 >
                   Write the damn expression
@@ -129,7 +132,7 @@ export default function HomePage() {
               </div>
               <div className='sm:w-1/2'>
                 <div className='mt-10 flex h-full min-h-[300px] w-full items-center justify-center rounded-md bg-[#161616] p-8 shadow sm:mt-0'>
-                  <div className='text-lg font-extralight text-white'>
+                  <div className='text-lg text-white font-extralight'>
                     Response
                   </div>
                 </div>
