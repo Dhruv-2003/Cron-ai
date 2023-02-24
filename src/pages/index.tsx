@@ -101,25 +101,28 @@ export default function HomePage() {
       <main>
         <section className='bg-black bg-page-gradient'>
           <div className='layout relative flex min-h-screen flex-col items-center justify-center py-12 text-center'>
-            <h1 className='mt-4 font-light text-white sm:text-2xl md:text-5xl'>
-              How do i write this damn{' '}
-              <span className='text-[#FF90E8]'> cron expression</span>
+            <h1 className='mt-4 font-light text-white sm:text-2xl md:text-4xl'>
+              How do I write this damn{' '}
+              <span className='font-medium text-[#FF90E8]'>
+                {' '}
+                cron expression
+              </span>
             </h1>
-            <p className='my-10 font-extralight text-[#d9d9d9] sm:text-lg md:text-2xl'>
+            <p className='sm:text-md my-10 font-extralight text-[#d9d9d9] md:text-lg'>
               Vercel released Cron Jobs recently and to help my fellow devs out
-              i built this tiny free tool
+              I built this tiny free tool
             </p>
             <div className='mt-10 h-full w-full gap-6 sm:flex'>
               <div className='sm:w-1/2'>
                 <div className='mb-4 h-fit min-h-[300px] w-full rounded-md bg-[#161616] p-8 shadow '>
-                  <input
-                    className='mb-4 h-12 w-full break-words rounded-lg bg-transparent px-4 text-lg font-extralight text-white focus:outline-none'
-                    placeholder='every 15 mins on alternate days of the month only in November and december'
+                  <textarea
+                    className='focus:ring-none mb-4 h-full min-h-[300px] w-full resize-none flex-wrap rounded-lg border-none bg-transparent px-4 text-lg font-extralight text-white focus:border-none focus:outline-none focus:ring-transparent active:outline-none'
+                    placeholder='every 15 mins on alternate days of the month only in november and december'
                     onChange={(e) => setUserInput(e.target.value)}
                   />
                 </div>
                 {/* <div
-                  className='w-full rounded-lg bg-white p-4'
+                  className='w-full p-4 bg-white rounded-lg'
                   onClick={() => generateChatGPTResponse()}
                 >
                   Write the damn expression
