@@ -34,7 +34,7 @@ async function generate(request: NextApiRequest, response: NextApiResponse) {
     return response.status(204).json({ output: 'No Output' });
 
   response.status(200).json({
-    output: apiResponse,
+    output: apiResponse.text,
   });
 }
 

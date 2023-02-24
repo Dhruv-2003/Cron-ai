@@ -30,7 +30,7 @@ export default function HomePage() {
   const generateResponse = async () => {
     try {
       console.log('Generating response ....');
-      const response = await fetch('./api/openai', {
+      const response = await fetch('./api/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -65,6 +65,7 @@ export default function HomePage() {
       );
       console.log(res);
       console.log(res.text);
+      setResponse(res.text);
     } catch (error) {
       console.log(error);
     }
@@ -86,6 +87,7 @@ export default function HomePage() {
       );
       console.log(res);
       console.log(res.text);
+      setResponse(res.text);
     } catch (error) {
       console.log(error);
     }
@@ -124,7 +126,7 @@ export default function HomePage() {
                 </div> */}
                 <button
                   className='w-full rounded-lg bg-white p-4'
-                  onClick={() => generateResponse()}
+                  onClick={() => generateChatGPTApi()}
                 >
                   Write the damn expression
                 </button>
