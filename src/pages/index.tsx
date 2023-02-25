@@ -1,36 +1,24 @@
 import * as React from 'react';
+import { useState } from 'react';
 
 import Layout from '@/components/layout/Layout';
-import ArrowLink from '@/components/links/ArrowLink';
-import ButtonLink from '@/components/links/ButtonLink';
-import UnderlineLink from '@/components/links/UnderlineLink';
-import UnstyledLink from '@/components/links/UnstyledLink';
 import Seo from '@/components/Seo';
-import { useState } from 'react';
-import { ChatGPTAPI, ChatGPTUnofficialProxyAPI } from 'chatgpt';
-
-/**
- * SVGR Support
- * Caveat: No React Props Type.
- *
- * You can override the next-env if the type is important to you
- * @see https://stackoverflow.com/questions/68103844/how-to-override-next-js-svg-module-declaration
- */
-
-// !STARTERCONF -> Select !STARTERCONF and CMD + SHIFT + F
-// Before you begin editing, follow all comments with `STARTERCONF`,
-// to customize the default configuration.
 
 export default function HomePage() {
-  const [userInput, setUserInput] = useState<string>('');
-  const [response, setResponse] = useState<string>();
+  const [userInput, setUserInput] = useState('');
+  const [response, setResponse] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-  const ACCESS_TOEKN: any = process.env.NEXT_PUBLIC_OPENAI_ACCESS_TOKEN;
-  const API_KEY: any = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
+  const handleCopyClick = () => {
+    navigator.clipboard.writeText(response).then(() => {
+      setCopied(true);
+    });
+  };
 
   const generateResponseViaChatGPT = async () => {
     try {
-      console.log('Generating response ....');
+      setLoading(true);
       const response = await fetch('./api/generate', {
         method: 'POST',
         headers: {
@@ -38,98 +26,27 @@ export default function HomePage() {
         },
         body: JSON.stringify({ userInput }),
       });
-      console.log(response.statusText);
       const data = await response.json();
       const { output } = data;
-
-      console.log(output);
       const formattedOutput = output.split('```')[1];
-      console.log(formattedOutput);
       setResponse(formattedOutput);
     } catch (err) {
       console.log(err);
-    }
-  };
-
-  const generateResponseViaOpenAI = async () => {
-    try {
-      console.log('Generating response ....');
-      const response = await fetch('./api/openai', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userInput }),
-      });
-      console.log(response.statusText);
-      const data = await response.json();
-      const { output } = data;
-
-      console.log(output);
-      const formattedOutput = output.text;
-      console.log(formattedOutput);
-      setResponse(formattedOutput);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const generateChatGPTResponse = async () => {
-    try {
-      if (!ACCESS_TOEKN) {
-        console.log('NO ACCESS TOKEN FOUND');
-        return;
-      }
-
-      const api = new ChatGPTUnofficialProxyAPI({
-        accessToken: ACCESS_TOEKN,
-      });
-
-      const res = await api.sendMessage(
-        'Define the CRON Expression for a job that runs every 15 mins on alternate days of the month only in november and december'
-      );
-      console.log(res);
-      console.log(res.text);
-      setResponse(res.text);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const generateChatGPTApi = async () => {
-    try {
-      if (!API_KEY) {
-        console.log('NO API KEY FOUND');
-        return;
-      }
-
-      const api = new ChatGPTAPI({
-        apiKey: API_KEY,
-      });
-
-      const res = await api.sendMessage(
-        'Define the CRON Expression for a job that runs every 15 mins on alternate days of the month only in november and december'
-      );
-      console.log(res);
-      console.log(res.text);
-      setResponse(res.text);
-    } catch (error) {
-      console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <Layout>
-      {/* <Seo templateTitle='Home' /> */}
       <Seo />
 
       <main>
-        <section className='bg-black bg-page-gradient'>
-          <div className='layout relative flex min-h-screen flex-col items-center justify-center py-12 text-center'>
+        <section className='bg-black bg-page-gradient no-scrollbar'>
+          <div className='relative flex flex-col items-center justify-center min-h-screen py-12 text-center layout'>
             <h1 className='mt-4 font-light text-white sm:text-2xl md:text-4xl'>
               How do I write this damn{' '}
               <span className='font-medium text-[#FF90E8]'>
-                {' '}
                 cron expression
               </span>
             </h1>
@@ -137,7 +54,7 @@ export default function HomePage() {
               Vercel released Cron Jobs recently and to help my fellow devs out
               I built this tiny free tool
             </p>
-            <div className='mt-10 h-full w-full gap-6 sm:flex'>
+            <div className='w-full h-full gap-6 mt-10 sm:flex'>
               <div className='sm:w-1/2'>
                 <div className='mb-4 h-fit min-h-[300px] w-full rounded-md bg-[#161616] p-8 shadow '>
                   <textarea
@@ -146,24 +63,47 @@ export default function HomePage() {
                     onChange={(e) => setUserInput(e.target.value)}
                   />
                 </div>
-                {/* <div
-                  className='w-full p-4 bg-white rounded-lg'
-                  onClick={() => generateChatGPTResponse()}
-                >
-                  Write the damn expression
-                </div> */}
                 <button
-                  className='w-full rounded-lg bg-white p-4'
+                  className='w-full p-4 bg-white rounded-lg'
+                  disabled={loading}
                   onClick={() => generateResponseViaChatGPT()}
                 >
-                  Write the damn expression
+                  {loading ? 'Loading...' : 'Write the damn expression'}
                 </button>
               </div>
               <div className='sm:w-1/2'>
                 <div className='mt-10 flex h-full min-h-[300px] w-full items-center justify-center rounded-md bg-[#161616] p-8 shadow sm:mt-0'>
-                  <div className='text-lg font-extralight text-white'>
-                    {response ? response : 'No Output'}
-                  </div>
+                  {loading ? (
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      strokeWidth={1.5}
+                      stroke='currentColor'
+                      className='h-10 w-10 animate-spin text-[#FF90E8]'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        d='M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99'
+                      />
+                    </svg>
+                  ) : (
+                    <div className='text-lg text-white font-extralight'>
+                      {response || 'No Output'}
+                    </div>
+                  )}
+                  {response && !loading && (
+                    <button
+                      className={`ml-4 rounded-md bg-[#FF90E8] py-1 px-2 text-black transition ease-linear hover:opacity-80 ${
+                        copied ? 'cursor-not-allowed opacity-50' : ''
+                      }`}
+                      onClick={handleCopyClick}
+                      disabled={copied}
+                    >
+                      {copied ? 'Copied!' : 'Copy'}
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
