@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { ChatGPTUnofficialProxyAPI } from 'chatgpt';
 
 const ACCESS_TOEKN: any = process.env.NEXT_PUBLIC_OPENAI_ACCESS_TOKEN;
-const BASE_PROMPT: string = 'Define the CRON Expression for a Job that runs ';
+const BASE_PROMPT = 'Define the CRON Expression for a Job that runs ';
 
 async function generate(request: NextApiRequest, response: NextApiResponse) {
   // console.log(ACCESS_TOEKN);
@@ -24,7 +24,7 @@ async function generate(request: NextApiRequest, response: NextApiResponse) {
 
   const userInput = request.body.userInput;
   console.log(userInput);
-  const prompt: string = `${BASE_PROMPT}${userInput}`;
+  const prompt = `${BASE_PROMPT}${userInput}`;
   console.log(prompt);
 
   const apiResponse = await chatGPTApi.sendMessage(prompt);

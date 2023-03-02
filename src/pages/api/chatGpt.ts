@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { ChatGPTAPI, ChatGPTUnofficialProxyAPI } from 'chatgpt';
+import { ChatGPTAPI } from 'chatgpt';
 
 const API_KEY: any = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 
-const BASE_PROMPT: string = 'Define the CRON Expression for a Job that runs ';
+const BASE_PROMPT = 'Define the CRON Expression for a Job that runs ';
 
 async function chatGPT(request: NextApiRequest, response: NextApiResponse) {
   // console.log(ACCESS_TOEKN);
@@ -25,7 +25,7 @@ async function chatGPT(request: NextApiRequest, response: NextApiResponse) {
 
   const userInput = request.body.userInput;
   console.log(userInput);
-  const prompt: string = `${BASE_PROMPT}${userInput}`;
+  const prompt = `${BASE_PROMPT}${userInput}`;
   console.log(prompt);
 
   const apiResponse = await chatGPTApi.sendMessage(prompt);
