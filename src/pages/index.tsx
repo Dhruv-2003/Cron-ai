@@ -28,6 +28,29 @@ export default function HomePage() {
   const ACCESS_TOEKN: any = process.env.NEXT_PUBLIC_OPENAI_ACCESS_TOKEN;
   const API_KEY: any = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 
+  const generateViaChatGPTOfficicalAPI = async () => {
+    try {
+      console.log('Generating response ....');
+      const response = await fetch('./api/chatGpt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userInput }),
+      });
+      console.log(response.statusText);
+      const data = await response.json();
+      const { output, id } = data;
+
+      console.log(output, id);
+      const formattedOutput = output.split('"')[1];
+      console.log(formattedOutput);
+      setResponse(formattedOutput);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const generateResponseViaChatGPT = async () => {
     try {
       console.log('Generating response ....');
@@ -74,50 +97,6 @@ export default function HomePage() {
     }
   };
 
-  const generateChatGPTResponse = async () => {
-    try {
-      if (!ACCESS_TOEKN) {
-        console.log('NO ACCESS TOKEN FOUND');
-        return;
-      }
-
-      const api = new ChatGPTUnofficialProxyAPI({
-        accessToken: ACCESS_TOEKN,
-      });
-
-      const res = await api.sendMessage(
-        'Define the CRON Expression for a job that runs every 15 mins on alternate days of the month only in november and december'
-      );
-      console.log(res);
-      console.log(res.text);
-      setResponse(res.text);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const generateChatGPTApi = async () => {
-    try {
-      if (!API_KEY) {
-        console.log('NO API KEY FOUND');
-        return;
-      }
-
-      const api = new ChatGPTAPI({
-        apiKey: API_KEY,
-      });
-
-      const res = await api.sendMessage(
-        'Define the CRON Expression for a job that runs every 15 mins on alternate days of the month only in november and december'
-      );
-      console.log(res);
-      console.log(res.text);
-      setResponse(res.text);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
@@ -154,7 +133,7 @@ export default function HomePage() {
                 </div> */}
                 <button
                   className='w-full rounded-lg bg-white p-4'
-                  onClick={() => generateResponseViaChatGPT()}
+                  onClick={() => generateViaChatGPTOfficicalAPI()}
                 >
                   Write the damn expression
                 </button>
